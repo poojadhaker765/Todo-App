@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./db");
@@ -5,14 +7,21 @@ const Todo = require("./models/Todo");
 
 const app = express();
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
 // Connect MongoDB
-connectDB();
+(async () => {
+    try {
+        await connectDB();
+    } catch (error) {
+        console.error("Database startup failed:", error.message);
+        process.exit(1);
+    }
+})();
 
 // Home route
 app.get("/", (req, res) => {
@@ -23,7 +32,6 @@ app.get("/", (req, res) => {
 app.get("/api/todos", async (req, res) => {
     try {
         const todos = await Todo.find();
-
         res.json(todos);
     } catch (error) {
         console.log("GET error:", error.message);
@@ -91,7 +99,6 @@ app.put("/api/todos/:id", async (req, res) => {
         }
 
         res.json(updatedTodo);
-
     } catch (error) {
         console.log("PUT error:", error.message);
 
@@ -103,6 +110,6 @@ app.put("/api/todos/:id", async (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running on port ${PORT}`);
 });

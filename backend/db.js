@@ -1,11 +1,24 @@
 const mongoose = require("mongoose");
+const dns = require("dns");
+
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
 const connectDB = async () => {
+    const mongoUri = process.env.MONGO_URI;
+
+    if (!mongoUri) {
+        throw new Error("MONGO_URI is missing. Add it to backend/.env");
+    }
+
     try {
-        await mongoose.connect("mongodb://127.0.0.1:27017/todoapp");
-        console.log("MongoDB connected");
+        await mongoose.connect(mongoUri, {
+            serverSelectionTimeoutMS: 10000
+        });
+
+        console.log("MongoDB Atlas connected");
     } catch (error) {
-        console.log("MongoDB connection failed:", error.message);
+        console.error("MongoDB connection failed:", error.message);
+        throw error;
     }
 };
 
