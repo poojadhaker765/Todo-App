@@ -8,11 +8,14 @@ function App() {
 
   const [editingId, setEditingId] = useState(null);
 
+  // EC2 Backend URL
+  const API_URL = "http://13.200.21.193:5000";
+
   // Get all todos
   const getTodos = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/todos"
+        `${API_URL}/api/todos`
       );
 
       setTodos(response.data);
@@ -29,7 +32,7 @@ function App() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/todos",
+        `${API_URL}/api/todos`,
         {
           title: title
         }
@@ -46,7 +49,7 @@ function App() {
   const deleteTodo = async (id) => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/todos/${id}`
+        `${API_URL}/api/todos/${id}`
       );
 
       setTodos(
@@ -71,7 +74,7 @@ function App() {
 
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/todos/${editingId}`,
+        `${API_URL}/api/todos/${editingId}`,
         {
           title: title
         }
