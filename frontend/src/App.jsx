@@ -9,7 +9,7 @@ function App() {
   const [editingId, setEditingId] = useState(null);
 
   // EC2 Backend URL
-  const API_URL = "http://pooja-todo-frontend-2026.s3-website.ap-south-1.amazonaws.com";
+  const API_URL = "Todo-ALB-410844410.ap-south-1.elb.amazonaws.com";
 
   // Get all todos
   const getTodos = async () => {
